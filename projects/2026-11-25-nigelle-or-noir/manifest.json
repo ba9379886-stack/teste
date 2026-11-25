@@ -1,7 +1,7 @@
 {
   "project_slug": "2026-11-25-nigelle-or-noir",
-  "title": "Nigelle, l'or noir de l'Orient",
-  "draft_name": "Nigelle - Or noir",
+  "title": "Huile d'Origan & Huile de Nigelle - 60 Capsules",
+  "draft_name": "Origan et Nigelle - 60 Softgels",
   "format": "9:16",
   "fps": 30,
   "voice": {
@@ -14,8 +14,7 @@
       "id": "scene_01",
       "image": "images/scene_01.png",
       "audio": "audio/scene_01.mp3",
-      "image_prompt": "Vertical 9:16 portrait composition, premium dark luxury product photography style, deep black background, warm golden amber rim lighting, rich golden-brown palette, close-up of a glossy golden-black droplet of nigella oil falling from a glass dropper, scattered tiny black nigella seeds glowing, ultra detailed, no text, no watermark",
-      "narration": "On l'appelle l'or noir de l'Orient. Et ce que tu vas découvrir va te choquer.",
+      "narration": "Et si tu réunissais les deux huiles naturelles les plus puissantes du monde... dans une seule capsule ?",
       "motion": "zoom_in",
       "transition": "flash"
     },
@@ -23,26 +22,23 @@
       "id": "scene_02",
       "image": "images/scene_02.png",
       "audio": "audio/scene_02.mp3",
-      "image_prompt": "Vertical 9:16 portrait composition, same premium dark luxury style, warm golden amber rim lighting, black and gold palette, ancient Egyptian treasure chamber with golden artifacts and a small bowl of black nigella seeds in the foreground, dramatic shadows, ultra detailed, no text, no watermark",
-      "narration": "Une graine utilisée depuis plus de deux mille ans, retrouvée jusque dans la tombe de Toutânkhamon.",
-      "motion": "pan_up",
+      "narration": "Voici l'alliance de l'huile d'origan sauvage et de l'huile de nigelle, concentrées en capsules molles.",
+      "motion": "zoom_out",
       "transition": "cut"
     },
     {
       "id": "scene_03",
       "image": "images/scene_03.png",
       "audio": "audio/scene_03.mp3",
-      "image_prompt": "Vertical 9:16 portrait composition, same premium dark luxury style, warm golden amber rim lighting, black and gold palette, macro shot of a nigella flower and black seeds with a glowing golden molecular structure floating above, scientific yet elegant, ultra detailed, no text, no watermark",
-      "narration": "Sa star : la thymoquinone, un antioxydant puissant que les chercheurs étudient partout dans le monde.",
-      "motion": "zoom_out",
-      "transition": "cut"
+      "narration": "Le secret, c'est sa haute teneur en carvacrol et en thymoquinone : deux actifs naturels ultra étudiés.",
+      "motion": "pan_up",
+      "transition": "dissolve"
     },
     {
       "id": "scene_04",
       "image": "images/scene_04.png",
       "audio": "audio/scene_04.mp3",
-      "image_prompt": "Vertical 9:16 portrait composition, same premium dark luxury style, warm golden amber rim lighting, black and gold palette, a fit confident man in his thirties stretching at sunrise in a warm-lit modern kitchen, a small glass bottle of golden-black oil on the counter, ultra detailed, no text, no watermark",
-      "narration": "Résultat : un soutien naturel pour tes défenses, ta digestion, et ton énergie au quotidien.",
+      "narration": "Ensemble, ils soutiennent tes défenses immunitaires, ton confort digestif et ta vitalité toute l'année.",
       "motion": "pan_right",
       "transition": "cut"
     },
@@ -50,26 +46,23 @@
       "id": "scene_05",
       "image": "images/scene_05.png",
       "audio": "audio/scene_05.mp3",
-      "image_prompt": "Vertical 9:16 portrait composition, same premium dark luxury style, warm golden amber rim lighting, black and gold palette, close-up of a woman with radiant glowing skin and long shiny dark hair, soft golden light on her face, a drop of golden oil on her fingertip, ultra detailed, no text, no watermark",
-      "narration": "Côté beauté, c'est le secret des peaux éclatantes et des cheveux plus forts, plus brillants.",
+      "narration": "Fini le goût brûlant et amer des huiles liquides : deux capsules faciles à avaler par jour, sans arrière-goût.",
       "motion": "zoom_in",
-      "transition": "dissolve"
+      "transition": "cut"
     },
     {
       "id": "scene_06",
       "image": "images/scene_06.png",
       "audio": "audio/scene_06.mp3",
-      "image_prompt": "Vertical 9:16 portrait composition, same premium dark luxury style, warm golden amber rim lighting, black and gold palette, a premium dark amber glass bottle with a dropper on a black stone surface, cold-pressed nigella seeds and golden oil pooling around it, dramatic spotlight, ultra detailed, no text, no watermark",
-      "narration": "Notre huile est pressée à froid, pure, sans additifs. Une seule goutte, et tu sens la différence.",
+      "narration": "Formule pure, sans OGM, sans gluten et testée en laboratoire, avec soixante capsules par sachet.",
       "motion": "pan_down",
-      "transition": "cut"
+      "transition": "dissolve"
     },
     {
       "id": "scene_07",
       "image": "images/scene_07.png",
       "audio": "audio/scene_07.mp3",
-      "image_prompt": "Vertical 9:16 portrait composition, same premium dark luxury style, warm golden amber rim lighting, black and gold palette, hero shot of the premium amber glass bottle centered on black reflective surface surrounded by glowing golden particles and nigella seeds, epic cinematic lighting, ultra detailed, no text, no watermark",
-      "narration": "Trente jours suffisent pour changer ta routine. Clique sur le lien, et offre-toi ta première cure.",
+      "narration": "Un seul sachet, c'est trente jours de cure complète. Clique sur le lien et commence ta routine dès aujourd'hui.",
       "motion": "zoom_in",
       "transition": "flash"
     }
