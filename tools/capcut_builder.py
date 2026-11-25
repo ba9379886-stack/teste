@@ -561,9 +561,23 @@ def main() -> None:
         )
         proj_dir = Path(sync_info["local_dir"])
 
+    chosen_drafts_dir = Path(args.drafts_dir) if args.drafts_dir else None
+    if chosen_drafts_dir is None:
+        try:
+            chosen_drafts_dir = detect_capcut_drafts_dir()
+        except FileNotFoundError:
+            print("\n[!] Dossier des projets CapCut introuvable à l'emplacement par défaut.")
+            print("    Dans CapCut -> Paramètres (icône engrenage en haut à droite) -> 'Enregistrer dans',")
+            user_input = input("    Colle ici le chemin de ton dossier CapCut Drafts puis appuie sur Entrée : ").strip().strip('"')
+            if not user_input or not Path(user_input).exists():
+                print(f"[ERREUR] Chemin invalide ou introuvable : {user_input}", file=sys.stderr)
+                sys.exit(1)
+            chosen_drafts_dir = Path(user_input).resolve()
+            save_local_config({"capcut_drafts_dir": str(chosen_drafts_dir)})
+
     result = build_capcut_draft(
         project_dir=proj_dir,
-        drafts_dir=Path(args.drafts_dir) if args.drafts_dir else None,
+        drafts_dir=chosen_drafts_dir,
         draft_name=args.draft_name,
         scene_gap_sec=args.gap,
         zoom_intensity=args.zoom,
