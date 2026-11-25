@@ -119,6 +119,7 @@ def list_remote_projects(repo: Optional[str] = None) -> List[Dict[str, Any]]:
     )
 
     projects_by_slug: Dict[str, Dict[str, Any]] = {}
+    pinned_latest_slug: Optional[str] = None
 
     for branch in candidate_branches:
         branch_name = branch["name"]
@@ -132,6 +133,22 @@ def list_remote_projects(repo: Optional[str] = None) -> List[Dict[str, Any]]:
         tree_entries = tree_data.get("tree", [])
         blob_shas = {e["path"]: e.get("sha") for e in tree_entries if e.get("type") == "blob"}
         all_paths = list(blob_shas.keys())
+
+        if pinned_latest_slug is None and "projects/latest.json" in blob_shas:
+            try:
+                latest_blob_url = (
+                    f"https://api.github.com/repos/{repo}/git/blobs/"
+                    f"{urllib.parse.quote(blob_shas['projects/latest.json'])}"
+                )
+                req = urllib.request.Request(
+                    latest_blob_url,
+                    headers=_github_headers(accept="application/vnd.github.raw"),
+                )
+                with urllib.request.urlopen(req, timeout=15) as resp:
+                    latest_info = json.loads(resp.read().decode("utf-8"))
+                    pinned_latest_slug = latest_info.get("latest_project_slug")
+            except Exception:
+                pass
 
         for path in all_paths:
             parts = path.split("/")
@@ -155,7 +172,11 @@ def list_remote_projects(repo: Optional[str] = None) -> List[Dict[str, Any]]:
                 if existing is None or len(project_files) > existing["file_count"]:
                     projects_by_slug[slug] = entry
 
-    return sorted(projects_by_slug.values(), key=lambda x: x["project_slug"], reverse=True)
+    return sorted(
+        projects_by_slug.values(),
+        key=lambda x: (1 if x["project_slug"] == pinned_latest_slug else 0, x["project_slug"]),
+        reverse=True,
+    )
 
 
 def list_local_projects(projects_dir: Optional[Path] = None) -> List[Dict[str, Any]]:
