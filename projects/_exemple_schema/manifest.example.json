@@ -1,0 +1,23 @@
+{
+  "project_slug": "2026-11-25-exemple-short",
+  "title": "Exemple de vidéo verticale 9:16",
+  "draft_name": "Exemple Short 9-16",
+  "format": "9:16",
+  "fps": 30,
+  "voice": {
+    "language": "fr-FR",
+    "gender": "masculine",
+    "use_case": "narration"
+  },
+  "scenes": [
+    {
+      "id": "scene_01",
+      "image": "images/scene_01.png",
+      "audio": "audio/scene_01.mp3",
+      "image_prompt": "Vertical 9:16 portrait composition, cinematic illustration...",
+      "narration": "Voici la première phrase de la voix off.",
+      "motion": "zoom_in",
+      "transition": "cut"
+    }
+  ]
+}

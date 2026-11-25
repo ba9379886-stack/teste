@@ -1,0 +1,14 @@
+# Environnement Python local
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Configuration locale Windows (chemins personnalisés éventuels)
+config.local.json
+
+# Dossiers temporaires / brouillons de test locaux
+.capcut_test_drafts/
+Unselected files/
+.DS_Store
+Thumbs.db
