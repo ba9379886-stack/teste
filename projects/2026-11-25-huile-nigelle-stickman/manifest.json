@@ -112,9 +112,16 @@
       "id": "scene_08",
       "image": "images/scene_08.png",
       "audio": "audio/scene_08.mp3",
-      "narration": "Mais attention : c'est un complément, pas un médicament. N'arrête jamais un traitement sans avis médical.",
+      "overlay": {
+        "file": "overlays/product_pouch.png",
+        "scale": 0.44,
+        "x": 0.0,
+        "y": 0.04,
+        "pop_in": true
+      },
+      "narration": "Mais tout dépend de la qualité : choisis une huile pure, pressée à froid, pour garder tous ses actifs.",
       "motion": "pan_left",
-      "transition": "cut"
+      "transition": "dissolve"
     },
     {
       "id": "scene_09",
@@ -122,12 +129,12 @@
       "audio": "audio/scene_09.mp3",
       "overlay": {
         "file": "overlays/product_pouch.png",
-        "scale": 0.37,
-        "x": 0.37,
-        "y": 0.34,
+        "scale": 0.33,
+        "x": 0.39,
+        "y": 0.30,
         "pop_in": true
       },
-      "narration": "Intègre-la à ton hygiène de vie, et abonne-toi pour la suite !",
+      "narration": "Prête à essayer ? Commande la tienne dès maintenant, le lien est en bio !",
       "motion": "zoom_out",
       "transition": "dissolve"
     }
