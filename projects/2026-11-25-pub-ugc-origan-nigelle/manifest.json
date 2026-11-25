@@ -1,0 +1,137 @@
+{
+  "project_slug": "2026-11-25-pub-ugc-origan-nigelle",
+  "draft_name": "Pub UGC - Origan et Nigelle 60 Softgels",
+  "format": "9:16",
+  "fps": 30,
+  "ad_metadata": {
+    "framework": "Direct-Response UGC 5-Step + Mechanism Bridge",
+    "primary_text": "L'huile d'origan + l'huile de nigelle réunies dans 1 seule capsule facile à avaler (sans brûlure ni arrière-goût).\n\n✓ Ultra haute teneur en Carvacrol & Thymoquinone\n✓ Soutient le fonctionnement normal du système immunitaire\n✓ Capsules softgels lisses : zéro goût amer, faciles à avaler\n✓ 60 Softgels par sachet · Sans OGM · Sans Gluten · Testé en laboratoire\n\nSimplifie ta routine bien-être dès ce matin 👇",
+    "headline": "Origan + Nigelle : 60 Softgels 2-en-1",
+    "description": "Sans OGM · Testé en labo"
+  },
+  "scenes": [
+    {
+      "id": "scene_01",
+      "image": "images/scene_01.png",
+      "video": "videos/scene_01.mp4",
+      "audio": "audio/scene_01.mp3",
+      "narration": "Arrête d'acheter ton huile d'origan et ton huile de nigelle séparément.",
+      "subtitle": "Arrête d'acheter ton huile d'origan et ta nigelle séparément.",
+      "motion": "zoom_in",
+      "transition": "cut",
+      "overlay": {
+        "file": "overlays/hook_01.png",
+        "scale": 0.88,
+        "x": 0.0,
+        "y": 0.68,
+        "pop_in": true
+      },
+      "video_prompt": "Authentic handheld iPhone front-camera video in a sunlit morning kitchen. The 38-year-old French man looks directly at the camera with a skeptical raised eyebrow, shakes his head slightly, and tilts the two dark amber glass dropper bottles in his hand. Natural breathing and subtle handheld camera drift, realistic skin texture, no text, no morphing."
+    },
+    {
+      "id": "scene_02",
+      "image": "images/scene_02.png",
+      "video": "videos/scene_02.mp4",
+      "audio": "audio/scene_02.mp3",
+      "narration": "En gouttes pures, l'origan brûle la gorge, et la nigelle liquide est presque imbuvable.",
+      "subtitle": "En gouttes pures, l'origan brûle la gorge et la nigelle est imbuvable.",
+      "motion": "zoom_in",
+      "transition": "dissolve",
+      "video_prompt": "Close-up natural smartphone video in morning kitchen window light. A steady hand squeezes the glass dropper slightly so one thick dark herbal oil drop falls slowly onto the stainless steel spoon next to the glass of water. Subtle camera push-in, crisp natural reflections, realistic physics."
+    },
+    {
+      "id": "scene_03",
+      "image": "images/scene_03.png",
+      "video": "videos/scene_03.mp4",
+      "audio": "audio/scene_03.mp3",
+      "narration": "Résultat : tes flacons finissent oubliés au fond du placard au bout de trois jours.",
+      "subtitle": "Résultat : tes flacons finissent oubliés au placard en 3 jours.",
+      "motion": "zoom_out",
+      "transition": "cut",
+      "overlay": {
+        "file": "overlays/badge_03_2en1.png",
+        "scale": 0.88,
+        "x": 0.0,
+        "y": 0.68,
+        "pop_in": true
+      },
+      "video_prompt": "Candid handheld iPhone video in the sunlit oak kitchen. The 38-year-old man smiles warmly and nods reassuringly at the camera while holding the white and olive-green stand-up pouch steady at chest height. Keep the pouch shape, white top, green bottom, and printed label completely crisp, still, and unchanged. Subtle natural camera sway."
+    },
+    {
+      "id": "scene_04",
+      "image": "images/scene_04.png",
+      "video": "videos/scene_04.mp4",
+      "audio": "audio/scene_04.mp3",
+      "narration": "Cette formule réunit les deux huiles concentrées dans une seule capsule lisse, sans aucun arrière-goût.",
+      "subtitle": "Cette formule réunit les 2 huiles en une capsule lisse, sans arrière-goût.",
+      "motion": "pan_up",
+      "transition": "dissolve",
+      "video_prompt": "Slow steady macro push-in across a warm sunlit oak countertop. Golden morning light shimmers softly inside the translucent amber softgel capsules on the white ceramic dish alongside fresh green oregano leaves and black nigella seeds. The white-and-olive-green pouch in the background remains completely stationary and identical."
+    },
+    {
+      "id": "scene_05",
+      "image": "images/scene_05.png",
+      "video": "videos/scene_05.mp4",
+      "audio": "audio/scene_05.mp3",
+      "narration": "Chaque prise associe carvacrol et thymoquinone pour soutenir tes défenses naturelles au quotidien.",
+      "subtitle": "Carvacrol + Thymoquinone pour soutenir tes défenses naturelles.",
+      "motion": "zoom_in",
+      "transition": "dissolve",
+      "overlay": {
+        "file": "overlays/badge_05_actifs.png",
+        "scale": 0.88,
+        "x": 0.0,
+        "y": 0.68,
+        "pop_in": true
+      },
+      "video_prompt": "Slow cinema macro camera glide over natural travertine stone in warm morning sunlight. Dewy green oregano leaves on the left gently catch sunbeams while golden light refracts smoothly through the single translucent amber softgel capsule beside black nigella seeds. Calm, ultra-clean natural movement."
+    },
+    {
+      "id": "scene_06",
+      "image": "images/scene_06.png",
+      "video": "videos/scene_06.mp4",
+      "audio": "audio/scene_06.mp3",
+      "narration": "Deux softgels faciles à avaler le matin avec un grand verre d'eau, et c'est réglé.",
+      "subtitle": "Deux softgels faciles à avaler le matin avec de l'eau, c'est réglé.",
+      "motion": "zoom_out",
+      "transition": "cut",
+      "video_prompt": "Natural tripod smartphone video in a sunlit morning kitchen. The 38-year-old French man smiles naturally at the camera, slightly raises the glass of fresh water in his left hand while holding the two golden softgel capsules steadily between his right thumb and index finger. Natural blinking and breathing, strictly two arms."
+    },
+    {
+      "id": "scene_07",
+      "image": "images/scene_07.png",
+      "video": "videos/scene_07.mp4",
+      "audio": "audio/scene_07.mp3",
+      "narration": "Soixante softgels par sachet, sans OGM, sans gluten, et testés en laboratoire.",
+      "subtitle": "60 softgels par sachet : sans OGM, sans gluten, testés en labo.",
+      "motion": "zoom_in",
+      "transition": "dissolve",
+      "overlay": {
+        "file": "overlays/badge_07_qualite.png",
+        "scale": 0.88,
+        "x": 0.0,
+        "y": 0.70,
+        "pop_in": true
+      },
+      "video_prompt": "Locked-off commercial product shot with a very slow gentle push-in. Warm morning sunbeams shift softly across the wooden kitchen counter and fresh green oregano leaves at the base, while the central white and olive-green OIL OF OREGANO WITH BLACK SEED OIL pouch stays 100% motionless, sharp, and undistorted."
+    },
+    {
+      "id": "scene_08",
+      "image": "images/scene_08.png",
+      "video": "videos/scene_08.mp4",
+      "audio": "audio/scene_08.mp3",
+      "narration": "Clique sur le lien juste en dessous pour commander ton sachet dès aujourd'hui.",
+      "subtitle": "Clique sur le lien juste en dessous pour commander aujourd'hui.",
+      "motion": "zoom_in",
+      "transition": "none",
+      "overlay": {
+        "file": "overlays/cta_card_08.png",
+        "scale": 0.34,
+        "x": 0.46,
+        "y": -0.16,
+        "pop_in": true
+      },
+      "video_prompt": "Authentic handheld iPhone selfie video in the sunlit oak kitchen. The 38-year-old French man smiles warmly and gives an encouraging nod toward the viewer, natural morning window light, subtle realistic handheld motion, natural human face and blinking."
+    }
+  ]
+}

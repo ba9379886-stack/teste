@@ -372,14 +372,17 @@ def build_capcut_draft(
     for idx, scene in enumerate(scenes):
         scene_id = scene.get("id") or f"scene_{idx + 1:02d}"
         img_rel = scene.get("image") or f"images/{scene_id}.png"
+        vid_rel = scene.get("video") or f"videos/{scene_id}.mp4"
         aud_rel = scene.get("audio") or f"audio/{scene_id}.mp3"
 
         img_path = (project_dir / img_rel).resolve()
+        vid_path = (project_dir / vid_rel).resolve()
         aud_path = (project_dir / aud_rel).resolve()
 
-        if not img_path.exists():
-            raise FileNotFoundError(f"Image manquante pour {scene_id} : {img_path}")
-        if first_image_path is None:
+        use_animated_mp4 = vid_path.exists() and vid_path.stat().st_size > 10_000
+        if not use_animated_mp4 and not img_path.exists():
+            raise FileNotFoundError(f"Image ou vidéo manquante pour {scene_id} : {img_path}")
+        if first_image_path is None and img_path.exists():
             first_image_path = img_path
 
         # Durée de la scène pilotée par la voix off (ou fallback duration_sec si scène muette)
@@ -407,26 +410,39 @@ def build_capcut_draft(
                 audio_seg.add_fade("0.02s", "0.03s")
             script.add_segment(audio_seg, "voiceover")
 
-        # 2. Segment Image + Cover Fit + Ken Burns + Transition
-        video_mat = cc.VideoMaterial(str(img_path))
+        # 2. Segment Vidéo IA (.mp4 Veo/PixVerse si disponible) ou Image + Ken Burns
+        media_source_path = vid_path if use_animated_mp4 else img_path
+        video_mat = cc.VideoMaterial(str(media_source_path))
         img_ratio = (video_mat.width / video_mat.height) if video_mat.height else canvas_ratio
         cover_scale = max(canvas_ratio / img_ratio, img_ratio / canvas_ratio)
 
-        video_seg = cc.VideoSegment(
-            video_mat,
-            clip_range,
-            clip_settings=ClipSettings(scale_x=cover_scale, scale_y=cover_scale),
-        )
-        video_seg.add_background_filling("blur", 0.0625)
+        if use_animated_mp4:
+            src_dur_us = min(video_mat.duration, clip_duration_us) if video_mat.duration >= clip_duration_us else video_mat.duration
+            video_seg = cc.VideoSegment(
+                video_mat,
+                clip_range,
+                source_timerange=Timerange(0, max(1, src_dur_us)),
+                volume=0.0,
+                clip_settings=ClipSettings(scale_x=cover_scale, scale_y=cover_scale),
+            )
+            video_seg.add_background_filling("blur", 0.0625)
+            motion = "ai_video_mp4"
+        else:
+            video_seg = cc.VideoSegment(
+                video_mat,
+                clip_range,
+                clip_settings=ClipSettings(scale_x=cover_scale, scale_y=cover_scale),
+            )
+            video_seg.add_background_filling("blur", 0.0625)
 
-        motion = scene.get("motion") or DEFAULT_MOTION_CYCLE[idx % len(DEFAULT_MOTION_CYCLE)]
-        _apply_motion_keyframes(
-            video_seg,
-            motion=motion,
-            cover_scale=cover_scale,
-            duration_us=clip_duration_us,
-            zoom_intensity=zoom_intensity,
-        )
+            motion = scene.get("motion") or DEFAULT_MOTION_CYCLE[idx % len(DEFAULT_MOTION_CYCLE)]
+            _apply_motion_keyframes(
+                video_seg,
+                motion=motion,
+                cover_scale=cover_scale,
+                duration_us=clip_duration_us,
+                zoom_intensity=zoom_intensity,
+            )
 
         # Ajouter une transition gratuite (sauf sur la toute dernière scène)
         if idx < len(scenes) - 1 and clip_duration_us >= int(0.8 * SEC):
@@ -569,6 +585,13 @@ def main() -> None:
     parser.add_argument("--zoom", type=float, default=0.12, help="Intensité du zoom Ken Burns (défaut: 0.12).")
     parser.add_argument("--gap", type=float, default=0.12, help="Pause en secondes entre deux scènes (défaut: 0.12).")
     parser.add_argument("--bgm", help="Chemin optionnel vers une musique de fond (.mp3/.wav).")
+    parser.add_argument(
+        "--animate",
+        default="none",
+        choices=["none", "auto", "pixverse", "veo"],
+        help="Anime les scènes en vraies vidéos .mp4 via Google Veo / PixVerse avant de créer le montage CapCut.",
+    )
+    parser.add_argument("--max-veo-clips", type=int, default=None, help="Limite optionnelle de clips Veo avant relais PixVerse (ex: 2).")
     args = parser.parse_args()
 
     from tools.github_sync import list_local_projects, sync_project_from_github
@@ -590,6 +613,15 @@ def main() -> None:
             f"({sync_info['total_files']} fichiers)."
         )
         proj_dir = Path(sync_info["local_dir"])
+
+    if args.animate != "none":
+        from tools.video_animator import animate_project_scenes
+        print(f"\nAnimation IA des scènes en cours (moteur: {args.animate})...")
+        animate_project_scenes(
+            project_dir=proj_dir,
+            provider=args.animate,
+            max_veo_clips=args.max_veo_clips,
+        )
 
     chosen_drafts_dir = Path(args.drafts_dir) if args.drafts_dir else None
     if chosen_drafts_dir is None:

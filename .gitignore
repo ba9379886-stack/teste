@@ -4,8 +4,13 @@ venv/
 __pycache__/
 *.py[cod]
 
-# Configuration locale Windows (chemins personnalisés éventuels)
+# Configuration locale Windows & clés API (JAMAIS versionnées sur GitHub)
 config.local.json
+.env
+.env.*
+
+# Clips vidéo générés localement par Veo / PixVerse sur le PC Windows
+projects/*/videos/*.mp4
 
 # Dossiers temporaires / brouillons de test locaux
 .capcut_test_drafts/
