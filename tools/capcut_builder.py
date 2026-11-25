@@ -266,6 +266,31 @@ def _apply_motion_keyframes(
         seg.add_keyframe(KeyframeProperty.uniform_scale, 0, s_max)
         seg.add_keyframe(KeyframeProperty.position_x, 0, -pan_offset)
         seg.add_keyframe(KeyframeProperty.position_x, duration_us, pan_offset)
+    elif m == "handheld_ugc":
+        # Simulation réaliste de micro-mouvements d'un iPhone tenu à la main (respiration + léger zoom)
+        base_s = round(cover_scale * 1.045, 4)
+        sway_pattern = [
+            (0.0, 0.0, 0.000),
+            (0.011, -0.009, 0.014),
+            (-0.008, 0.010, 0.006),
+            (0.009, 0.005, 0.022),
+            (-0.006, -0.008, 0.012),
+            (0.004, 0.006, 0.028),
+        ]
+        step_us = int(0.95 * SEC)
+        t_cur = 0
+        step_idx = 0
+        while t_cur < duration_us:
+            dx, dy, ds = sway_pattern[step_idx % len(sway_pattern)]
+            seg.add_keyframe(KeyframeProperty.uniform_scale, t_cur, round(base_s + cover_scale * ds, 4))
+            seg.add_keyframe(KeyframeProperty.position_x, t_cur, dx)
+            seg.add_keyframe(KeyframeProperty.position_y, t_cur, dy)
+            t_cur += step_us
+            step_idx += 1
+        dx_end, dy_end, ds_end = sway_pattern[step_idx % len(sway_pattern)]
+        seg.add_keyframe(KeyframeProperty.uniform_scale, duration_us, round(base_s + cover_scale * ds_end, 4))
+        seg.add_keyframe(KeyframeProperty.position_x, duration_us, dx_end)
+        seg.add_keyframe(KeyframeProperty.position_y, duration_us, dy_end)
     else:
         seg.add_keyframe(KeyframeProperty.uniform_scale, 0, s_min)
 

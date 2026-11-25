@@ -1,17 +1,22 @@
-"""Moteur d'animation Image-to-Video (Google Veo via Gemini/Vertex AI + PixVerse API v2).
+"""Moteur d'animation Image-to-Video (Google Veo REST direct + Vertex AI + PixVerse API v2).
 
 Anime les images clés `projects/<slug>/images/scene_XX.png` en véritables clips vidéo `.mp4`
 (`projects/<slug>/videos/scene_XX.mp4`) avant l'assemblage automatique dans CapCut Desktop Windows.
 
-Sécurité :
-- Les clés API sont lues exclusivement depuis `config.local.json` (ignoré par Git) ou les variables
-  d'environnement (`VEO_API_KEY` / `GOOGLE_API_KEY` / `GEMINI_API_KEY` et `PIXVERSE_API_KEY`).
-- Aucune clé n'est jamais stockée dans le dépôt Git.
+Points clés :
+- Appels REST directs (`requests`) vers Google Veo (`generativelanguage.googleapis.com` pour les clés
+  Google AI Studio `AIza...` et `aiplatform.googleapis.com` pour Vertex AI `AQ...` / OAuth), contournant
+  la restriction locale du SDK Python `google-genai 3.6+` et forçant `personGeneration="allow_adult"`
+  requis en mode Image-to-Video.
+- Bascule automatique entre Google Veo et PixVerse, et **tolérance aux quotas / crédits épuisés** :
+  si seuls 2 clips passent (quota journalier) ou si le solde API est à 0, les scènes déjà animées
+  sont conservées et `capcut_builder.py` complète automatiquement le montage CapCut sans planter.
 """
 
 from __future__ import annotations
 
 import argparse
+import base64
 import io
 import json
 import os
@@ -33,6 +38,14 @@ DEFAULT_NEGATIVE_PROMPT = (
     "deformed face, fast spin, 360 rotation, blurry, watermark, subtitles, text overlay, cartoon"
 )
 
+VEO_MODELS_ORDER = [
+    "veo-3.1-fast-generate-preview",
+    "veo-3.1-generate-preview",
+    "veo-3.0-fast-generate-001",
+    "veo-3.0-generate-001",
+    "veo-2.0-generate-001",
+]
+
 
 def load_local_config() -> Dict[str, Any]:
     if CONFIG_LOCAL_PATH.exists():
@@ -43,12 +56,18 @@ def load_local_config() -> Dict[str, Any]:
     return {}
 
 
-def save_api_keys_locally(veo_key: Optional[str] = None, pixverse_key: Optional[str] = None) -> Path:
+def save_api_keys_locally(
+    veo_key: Optional[str] = None,
+    pixverse_key: Optional[str] = None,
+    gcp_project: Optional[str] = None,
+) -> Path:
     cfg = load_local_config()
     if veo_key:
         cfg["veo_api_key"] = veo_key.strip()
     if pixverse_key:
         cfg["pixverse_api_key"] = pixverse_key.strip()
+    if gcp_project:
+        cfg["gcp_project"] = gcp_project.strip()
     CONFIG_LOCAL_PATH.write_text(json.dumps(cfg, indent=2, ensure_ascii=False), encoding="utf-8")
     return CONFIG_LOCAL_PATH
 
@@ -76,8 +95,56 @@ def resolve_keys(
 
 
 # ---------------------------------------------------------------------------
-# 1. Google Veo (via SDK unifié `google-genai` — clés `AQ.` Vertex Express ou `AIza` Gemini)
+# 1. Google Veo — Client REST Direct (AI Studio `AIza...` & Vertex Express `AQ...`)
 # ---------------------------------------------------------------------------
+
+def _encode_image_for_veo(image_path: Path) -> Dict[str, str]:
+    mime_map = {
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".webp": "image/webp",
+    }
+    mime_type = mime_map.get(image_path.suffix.lower(), "image/png")
+    raw = image_path.read_bytes()
+    return {
+        "bytesBase64Encoded": base64.b64encode(raw).decode("utf-8"),
+        "mimeType": mime_type,
+    }
+
+
+def _extract_and_save_veo_video(result: Dict[str, Any], output_mp4: Path, headers: Dict[str, str], api_key: str) -> Path:
+    video_data: Optional[Dict[str, Any]] = None
+    gvr = result.get("generateVideoResponse")
+    if isinstance(gvr, dict) and gvr.get("generatedSamples"):
+        video_data = gvr["generatedSamples"][0].get("video")
+    elif result.get("generatedVideos"):
+        video_data = result["generatedVideos"][0].get("video")
+    elif result.get("videos"):
+        video_data = result["videos"][0]
+
+    if not isinstance(video_data, dict):
+        raise RuntimeError(f"Format de réponse Veo inattendu : {str(result)[:300]}")
+
+    output_mp4.parent.mkdir(parents=True, exist_ok=True)
+
+    if "bytesBase64Encoded" in video_data:
+        output_mp4.write_bytes(base64.b64decode(video_data["bytesBase64Encoded"]))
+        return output_mp4
+
+    uri = video_data.get("uri")
+    if uri and uri.startswith("http"):
+        dl_headers = dict(headers)
+        r = requests.get(uri, headers=dl_headers, timeout=180)
+        if r.status_code != 200 and "key=" not in uri:
+            sep = "&" if "?" in uri else "?"
+            r = requests.get(f"{uri}{sep}key={api_key}", timeout=180)
+        r.raise_for_status()
+        output_mp4.write_bytes(r.content)
+        return output_mp4
+
+    raise RuntimeError(f"Flux vidéo introuvable dans la réponse Veo : {list(video_data.keys())}")
+
 
 def generate_clip_veo(
     image_path: Path,
@@ -87,118 +154,109 @@ def generate_clip_veo(
     negative_prompt: str = DEFAULT_NEGATIVE_PROMPT,
     aspect_ratio: str = "9:16",
     preferred_model: Optional[str] = None,
-    poll_timeout_sec: int = 360,
+    poll_timeout_sec: int = 420,
 ) -> Path:
-    from google import genai
-    from google.genai import types
+    models_to_try = [preferred_model] if preferred_model else VEO_MODELS_ORDER
+    is_vertex_express_key = api_key.startswith("AQ.")
 
-    # Les clés commençant par "AQ." sont des clés Google Cloud Vertex AI Express Mode
-    use_vertex = api_key.startswith("AQ.")
-    clients_to_try = []
-    if use_vertex:
-        clients_to_try.append(("vertexai-express", lambda: genai.Client(vertexai=True, api_key=api_key)))
-        clients_to_try.append(("gemini-api", lambda: genai.Client(api_key=api_key)))
+    # Définir les passerelles REST à tester selon le préfixe de la clé
+    endpoints_to_try = []
+    if is_vertex_express_key:
+        endpoints_to_try.append((
+            "Vertex-Express",
+            "https://aiplatform.googleapis.com/v1beta1/publishers/google/models/{model}:predictLongRunning",
+            "https://aiplatform.googleapis.com/v1beta1/{op_name}",
+        ))
     else:
-        clients_to_try.append(("gemini-api", lambda: genai.Client(api_key=api_key)))
+        endpoints_to_try.append((
+            "Gemini-AI-Studio",
+            "https://generativelanguage.googleapis.com/v1beta/models/{model}:predictLongRunning",
+            "https://generativelanguage.googleapis.com/v1beta/{op_name}",
+        ))
 
-    models_to_try = (
-        [preferred_model]
-        if preferred_model
-        else [
-            "veo-3.1-fast-generate-001",
-            "veo-3.1-lite-generate-preview",
-            "veo-3.0-fast-generate-001",
-            "veo-2.0-generate-001",
-        ]
-    )
+    headers = {
+        "Content-Type": "application/json",
+        "x-goog-api-key": api_key,
+    }
+    encoded_img = _encode_image_for_veo(image_path)
+    errors_collected: List[str] = []
 
-    # Charger l'image de départ proprement via types.Image.from_file (ou PIL fallback)
-    try:
-        genai_img = types.Image.from_file(location=str(image_path))
-    except Exception:
-        genai_img = Image.open(image_path)
-
-    last_err: Optional[Exception] = None
-    for backend_label, make_client in clients_to_try:
-        try:
-            client = make_client()
-        except Exception as e:
-            last_err = e
-            continue
-
+    for ep_label, submit_tmpl, poll_tmpl in endpoints_to_try:
         for model_id in models_to_try:
-            for dur in (6, 8, 5):
-                try:
-                    print(f"    [Veo/{backend_label}] Essai modèle '{model_id}' ({dur}s)...")
-                    cfg_kwargs: Dict[str, Any] = {
-                        "aspect_ratio": aspect_ratio,
-                        "number_of_videos": 1,
-                        "duration_seconds": dur,
+            dur = 6 if "veo-3" in model_id else 5
+            submit_url = submit_tmpl.format(model=model_id)
+
+            parameters: Dict[str, Any] = {
+                "aspectRatio": aspect_ratio,
+                "durationSeconds": dur,
+                "sampleCount": 1,
+                "personGeneration": "allow_adult",
+            }
+            if negative_prompt:
+                parameters["negativePrompt"] = negative_prompt
+
+            body = {
+                "instances": [
+                    {
+                        "prompt": prompt,
+                        "image": encoded_img,
                     }
-                    if negative_prompt:
-                        cfg_kwargs["negative_prompt"] = negative_prompt
+                ],
+                "parameters": parameters,
+            }
 
-                    operation = client.models.generate_videos(
-                        model=model_id,
-                        prompt=prompt,
-                        image=genai_img,
-                        config=types.GenerateVideosConfig(**cfg_kwargs),
-                    )
+            print(f"    [Veo/{ep_label}] Envoi vers '{model_id}' ({dur}s)...")
+            resp = requests.post(submit_url, headers=headers, json=body, timeout=60)
 
-                    deadline = time.time() + poll_timeout_sec
-                    while not operation.done:
-                        if time.time() > deadline:
-                            raise TimeoutError(f"Délai dépassé ({poll_timeout_sec}s) sur Veo {model_id}")
-                        time.sleep(10)
-                        operation = client.operations.get(operation)
-
-                    resp_obj = getattr(operation, "response", None) or getattr(operation, "result", None)
-                    gen_videos = getattr(resp_obj, "generated_videos", None) or []
-                    if not gen_videos:
-                        err_detail = getattr(operation, "error", None)
-                        raise RuntimeError(f"Aucune vidéo retournée par Veo ({err_detail})")
-
-                    vid_obj = gen_videos[0].video
-                    output_mp4.parent.mkdir(parents=True, exist_ok=True)
-
-                    # Cas 1 : octets MP4 déjà présents (Vertex AI)
-                    raw_bytes = getattr(vid_obj, "video_bytes", None)
-                    if raw_bytes:
-                        output_mp4.write_bytes(raw_bytes)
-                        return output_mp4
-
-                    # Cas 2 : téléchargement via client.files.download (Gemini Developer API)
-                    try:
-                        downloaded = client.files.download(file=vid_obj)
-                        if isinstance(downloaded, (bytes, bytearray)):
-                            output_mp4.write_bytes(downloaded)
-                            return output_mp4
-                    except Exception:
-                        pass
-
-                    if hasattr(vid_obj, "save"):
-                        vid_obj.save(str(output_mp4))
-                        if output_mp4.exists() and output_mp4.stat().st_size > 1000:
-                            return output_mp4
-
-                    uri = getattr(vid_obj, "uri", None)
-                    if uri and uri.startswith("http"):
-                        r = requests.get(uri, headers={"x-goog-api-key": api_key}, timeout=120)
-                        r.raise_for_status()
-                        output_mp4.write_bytes(r.content)
-                        return output_mp4
-
-                    raise RuntimeError("Impossible d'extraire le flux MP4 depuis la réponse Veo.")
-                except Exception as exc:
-                    last_err = exc
-                    msg = str(exc).lower()
-                    # Si la durée seule est refusée, tester la durée suivante sur ce modèle
-                    if "duration" in msg:
-                        continue
-                    # Sinon passer au modèle suivant
+            if resp.status_code != 200:
+                short_err = resp.text.strip().replace("\n", " ")[:260]
+                errors_collected.append(f"{ep_label}/{model_id} -> HTTP {resp.status_code}: {short_err}")
+                # Si la clé elle-même est refusée pour predictLongRunning (401/403 API key not supported / Express mode)
+                if resp.status_code in (401, 403) and (
+                    "api keys are not supported" in short_err.lower()
+                    or "express" in short_err.lower()
+                    or "permission_denied" in short_err.lower()
+                    or "billing" in short_err.lower()
+                ):
                     break
+                if resp.status_code == 429:
+                    raise RuntimeError(f"Quota Google Veo atteint (HTTP 429) : {short_err}")
+                continue
 
-    raise RuntimeError(f"Échec Google Veo : {last_err}")
+            op_data = resp.json()
+            op_name = op_data.get("name")
+            if not op_name:
+                errors_collected.append(f"{ep_label}/{model_id} -> Réponse sans 'name': {op_data}")
+                continue
+
+            print(f"    [Veo/{ep_label}] Opération démarrée : {op_name}")
+            poll_url = poll_tmpl.format(op_name=op_name.lstrip("/"))
+            start_t = time.time()
+
+            while time.time() - start_t < poll_timeout_sec:
+                time.sleep(10)
+                pr = requests.get(poll_url, headers=headers, timeout=30)
+                if pr.status_code != 200:
+                    raise RuntimeError(f"Erreur polling Veo ({pr.status_code}) : {pr.text[:240]}")
+                pjson = pr.json()
+                if pjson.get("done"):
+                    if "error" in pjson:
+                        raise RuntimeError(f"Erreur génération Veo : {pjson['error']}")
+                    result_payload = pjson.get("response") or pjson.get("result") or {}
+                    return _extract_and_save_veo_video(result_payload, output_mp4, headers, api_key)
+                elapsed = int(time.time() - start_t)
+                print(f"    [Veo/{ep_label}] Génération en cours... ({elapsed}s)")
+
+            raise TimeoutError(f"Délai dépassé ({poll_timeout_sec}s) sur Veo {model_id}")
+
+    hint = ""
+    if is_vertex_express_key:
+        hint = (
+            " | ASTUCE : Votre clé commence par 'AQ.' (Vertex AI Express Mode), or Google bloque souvent "
+            "les opérations longues Veo (predictLongRunning) en mode Express. Créez une clé Google AI Studio "
+            "classique commençant par 'AIza...' sur https://aistudio.google.com/apikey (reliée au même projet Cloud) !"
+        )
+    raise RuntimeError(" ; ".join(errors_collected[:2]) + hint)
 
 
 # ---------------------------------------------------------------------------
@@ -230,8 +288,7 @@ def _pixverse_upload_image(image_path: Path, api_key: str) -> int:
     data = resp.json()
     if data.get("ErrCode") != 0 or not isinstance(data.get("Resp"), dict):
         raise RuntimeError(f"PixVerse upload refusé : {data.get('ErrMsg', data)}")
-    img_id = int(data["Resp"]["img_id"])
-    return img_id
+    return int(data["Resp"]["img_id"])
 
 
 def generate_clip_pixverse(
@@ -283,12 +340,15 @@ def generate_clip_pixverse(
             print(f"    [PixVerse/{model_name}] Tâche lancée (video_id={video_id})...")
             break
         else:
-            last_err = f"{model_name} -> {data.get('ErrMsg', data)}"
+            err_msg = str(data.get("ErrMsg", data))
+            last_err = f"{model_name} -> {err_msg}"
+            # Si solde insuffisant sur le compte API PixVerse, inutile de retenter 4 modèles
+            if "insufficient balance" in err_msg.lower() or "top up" in err_msg.lower():
+                break
 
     if video_id is None:
         raise RuntimeError(f"Échec création PixVerse : {last_err}")
 
-    # Polling toutes les 5 secondes jusqu'à status == 1 (succès)
     deadline = time.time() + poll_timeout_sec
     while time.time() < deadline:
         time.sleep(5)
@@ -324,7 +384,7 @@ def generate_clip_pixverse(
 
 
 # ---------------------------------------------------------------------------
-# 3. Orchestrateur de Projet (`manifest.json` -> `videos/scene_XX.mp4`)
+# 3. Orchestrateur résilient (`manifest.json` -> `videos/scene_XX.mp4`)
 # ---------------------------------------------------------------------------
 
 def animate_project_scenes(
@@ -334,14 +394,9 @@ def animate_project_scenes(
     pixverse_key: Optional[str] = None,
     force: bool = False,
     max_veo_clips: Optional[int] = None,
+    strict: bool = False,
 ) -> Dict[str, Any]:
-    """Anime toutes les scènes d'un projet en clips `.mp4`.
-
-    En mode `auto` :
-    - Utilise Google Veo si une clé Veo est présente (dans la limite `max_veo_clips` si précisée),
-      puis bascule automatiquement et sans coupure sur PixVerse en cas de limite/quota ou d'erreur.
-    - Si seule la clé PixVerse est renseignée, utilise PixVerse directement.
-    """
+    """Anime les scènes d'un projet en clips `.mp4` sans bloquer le montage CapCut en cas de quota épuisé."""
     project_dir = Path(project_dir).resolve()
     manifest_path = project_dir / "manifest.json"
     if not manifest_path.exists():
@@ -350,15 +405,15 @@ def animate_project_scenes(
     keys = resolve_keys(veo_key, pixverse_key)
     provider = provider.lower().strip()
 
-    if provider == "veo" and not keys["veo"]:
-        raise RuntimeError("Clé Google Veo absente. Enregistre-la avec --save-keys --veo-key ...")
-    if provider == "pixverse" and not keys["pixverse"]:
-        raise RuntimeError("Clé PixVerse absente. Enregistre-la avec --save-keys --pixverse-key ...")
-    if provider == "auto" and not (keys["veo"] or keys["pixverse"]):
-        raise RuntimeError(
-            "Aucune clé API vidéo trouvée dans config.local.json ou l'environnement. "
-            "Lance d'abord : python -m tools.video_animator --save-keys --veo-key ... --pixverse-key ..."
+    if not keys["veo"] and not keys["pixverse"]:
+        msg = (
+            "Aucune clé API vidéo trouvée dans config.local.json. "
+            "Montage CapCut poursuivi avec animations caméra natives haute fluidité."
         )
+        if strict:
+            raise RuntimeError(msg)
+        print(f"[!] {msg}")
+        return {"project": project_dir.name, "animated_scenes": 0, "fallback_scenes": 0, "scenes": []}
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     scenes: List[Dict[str, Any]] = manifest.get("scenes", [])
@@ -366,7 +421,8 @@ def animate_project_scenes(
     aspect_ratio = "9:16" if fmt in ("9:16", "vertical") else ("16:9" if fmt in ("16:9", "horizontal") else "1:1")
 
     veo_used = 0
-    veo_disabled_for_batch = False
+    veo_disabled = not bool(keys["veo"]) or provider == "pixverse"
+    pixverse_disabled = not bool(keys["pixverse"]) or provider == "veo"
     summary: List[Dict[str, Any]] = []
 
     for idx, scene in enumerate(scenes):
@@ -377,8 +433,12 @@ def animate_project_scenes(
         out_mp4 = (project_dir / vid_rel).resolve()
 
         if out_mp4.exists() and out_mp4.stat().st_size > 10_000 and not force:
-            print(f"[{idx + 1}/{len(scenes)}] {scene_id} : déjà animé ({out_mp4.name}), conservé.")
+            print(f"[{idx + 1}/{len(scenes)}] {scene_id} : clip MP4 déjà présent ({out_mp4.name}), conservé.")
             summary.append({"id": scene_id, "status": "cached", "video": str(out_mp4)})
+            continue
+
+        if veo_disabled and pixverse_disabled:
+            summary.append({"id": scene_id, "status": "native_capcut_motion"})
             continue
 
         if not img_path.exists():
@@ -392,22 +452,11 @@ def animate_project_scenes(
 
         print(f"[{idx + 1}/{len(scenes)}] Animation de {scene_id} depuis {img_rel}...")
 
-        # Construire l'ordre des moteurs à tenter pour cette scène
         order: List[str] = []
-        if provider == "veo":
-            order = ["veo"]
-        elif provider == "pixverse":
-            order = ["pixverse"]
-        else:  # auto
-            can_try_veo = (
-                bool(keys["veo"])
-                and not veo_disabled_for_batch
-                and (max_veo_clips is None or veo_used < max_veo_clips)
-            )
-            if can_try_veo:
-                order.append("veo")
-            if keys["pixverse"]:
-                order.append("pixverse")
+        if not veo_disabled and (max_veo_clips is None or veo_used < max_veo_clips):
+            order.append("veo")
+        if not pixverse_disabled:
+            order.append("pixverse")
 
         used_engine = None
         scene_err: Optional[Exception] = None
@@ -437,33 +486,49 @@ def animate_project_scenes(
                 break
             except Exception as exc:
                 scene_err = exc
-                print(f"    [!] {engine} indisponible sur {scene_id} ({exc})")
-                if engine == "veo" and provider == "auto" and keys["pixverse"]:
-                    print("    -> Bascule automatique sur PixVerse pour la suite...")
-                    veo_disabled_for_batch = True
+                print(f"    [!] {engine} indisponible sur {scene_id} : {exc}")
+                if engine == "veo":
+                    veo_disabled = True
+                elif engine == "pixverse":
+                    pixverse_disabled = True
 
         if used_engine is None:
-            raise RuntimeError(f"Impossible d'animer {scene_id} : {scene_err}")
+            if strict:
+                raise RuntimeError(f"Impossible d'animer {scene_id} : {scene_err}")
+            print(
+                f"    -> Aucun moteur cloud actif pour {scene_id} ; "
+                "bascule automatique sur l'animation caméra native CapCut (handheld UGC / Ken Burns)."
+            )
+            summary.append({"id": scene_id, "status": "native_capcut_motion", "reason": str(scene_err)})
+            continue
 
         size_kb = round(out_mp4.stat().st_size / 1024, 1)
         print(f"    [OK] {out_mp4.name} généré via {used_engine} ({size_kb} Ko)")
         summary.append({"id": scene_id, "status": "generated", "provider": used_engine, "video": str(out_mp4)})
 
-    return {"project": project_dir.name, "animated_scenes": len(summary), "scenes": summary}
+    animated_count = sum(1 for s in summary if s["status"] in ("generated", "cached"))
+    fallback_count = len(summary) - animated_count
+    return {
+        "project": project_dir.name,
+        "animated_mp4_scenes": animated_count,
+        "native_motion_scenes": fallback_count,
+        "scenes": summary,
+    }
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Anime les scènes d'un projet Arena en vidéos MP4 via Google Veo et/ou PixVerse."
     )
-    parser.add_argument("--save-keys", action="store_true", help="Enregistre localement les clés API dans config.local.json (ignoré par Git).")
-    parser.add_argument("--veo-key", help="Clé API Google Veo / Vertex Express / Gemini.")
+    parser.add_argument("--save-keys", action="store_true", help="Enregistre localement les clés API dans config.local.json.")
+    parser.add_argument("--veo-key", help="Clé API Google AI Studio (AIza...) ou Vertex.")
     parser.add_argument("--pixverse-key", help="Clé API PixVerse (sk-...).")
     parser.add_argument("--project", help="Slug du projet dans projects/<slug> (par défaut: plus récent).")
-    parser.add_argument("--provider", default="auto", choices=["auto", "pixverse", "veo"], help="Moteur vidéo (auto = Veo puis fallback auto PixVerse).")
-    parser.add_argument("--max-veo-clips", type=int, default=None, help="Limiter le nombre de clips Veo avant relais PixVerse (ex: 2).")
-    parser.add_argument("--force", action="store_true", help="Régénérer même si videos/scene_XX.mp4 existe déjà.")
-    parser.add_argument("--local-only", action="store_true", help="Ne pas synchroniser depuis GitHub avant d'animer.")
+    parser.add_argument("--provider", default="auto", choices=["auto", "pixverse", "veo"])
+    parser.add_argument("--max-veo-clips", type=int, default=None)
+    parser.add_argument("--force", action="store_true")
+    parser.add_argument("--strict", action="store_true", help="Échouer avec code d'erreur si aucune vidéo MP4 ne peut être générée.")
+    parser.add_argument("--local-only", action="store_true")
     args = parser.parse_args()
 
     if args.save_keys:
@@ -494,6 +559,7 @@ def main() -> None:
         pixverse_key=args.pixverse_key,
         force=args.force,
         max_veo_clips=args.max_veo_clips,
+        strict=args.strict,
     )
     print(json.dumps(res, indent=2, ensure_ascii=False))
 

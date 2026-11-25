@@ -17,7 +17,7 @@
       "audio": "audio/scene_01.mp3",
       "narration": "Arrête d'acheter ton huile d'origan et ton huile de nigelle séparément.",
       "subtitle": "Arrête d'acheter ton huile d'origan et ta nigelle séparément.",
-      "motion": "zoom_in",
+      "motion": "handheld_ugc",
       "transition": "cut",
       "overlay": {
         "file": "overlays/hook_01.png",
@@ -46,7 +46,7 @@
       "audio": "audio/scene_03.mp3",
       "narration": "Résultat : tes flacons finissent oubliés au fond du placard au bout de trois jours.",
       "subtitle": "Résultat : tes flacons finissent oubliés au placard en 3 jours.",
-      "motion": "zoom_out",
+      "motion": "handheld_ugc",
       "transition": "cut",
       "overlay": {
         "file": "overlays/badge_03_2en1.png",
@@ -93,7 +93,7 @@
       "audio": "audio/scene_06.mp3",
       "narration": "Deux softgels faciles à avaler le matin avec un grand verre d'eau, et c'est réglé.",
       "subtitle": "Deux softgels faciles à avaler le matin avec de l'eau, c'est réglé.",
-      "motion": "zoom_out",
+      "motion": "handheld_ugc",
       "transition": "cut",
       "video_prompt": "Natural tripod smartphone video in a sunlit morning kitchen. The 38-year-old French man smiles naturally at the camera, slightly raises the glass of fresh water in his left hand while holding the two golden softgel capsules steadily between his right thumb and index finger. Natural blinking and breathing, strictly two arms."
     },
@@ -110,7 +110,7 @@
         "file": "overlays/badge_07_qualite.png",
         "scale": 0.88,
         "x": 0.0,
-        "y": 0.70,
+        "y": 0.7,
         "pop_in": true
       },
       "video_prompt": "Locked-off commercial product shot with a very slow gentle push-in. Warm morning sunbeams shift softly across the wooden kitchen counter and fresh green oregano leaves at the base, while the central white and olive-green OIL OF OREGANO WITH BLACK SEED OIL pouch stays 100% motionless, sharp, and undistorted."
@@ -122,7 +122,7 @@
       "audio": "audio/scene_08.mp3",
       "narration": "Clique sur le lien juste en dessous pour commander ton sachet dès aujourd'hui.",
       "subtitle": "Clique sur le lien juste en dessous pour commander aujourd'hui.",
-      "motion": "zoom_in",
+      "motion": "handheld_ugc",
       "transition": "none",
       "overlay": {
         "file": "overlays/cta_card_08.png",
