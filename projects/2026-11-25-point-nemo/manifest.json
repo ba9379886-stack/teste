@@ -1,0 +1,104 @@
+{
+  "project_slug": "2026-11-25-point-nemo",
+  "title": "Point Nemo : l'endroit le plus isolé du monde",
+  "draft_name": "Point Nemo - Endroit le plus isole",
+  "format": "9:16",
+  "fps": 30,
+  "voice": {
+    "language": "fr-FR",
+    "gender": "masculine",
+    "use_case": "narration"
+  },
+  "scenes": [
+    {
+      "id": "scene_01",
+      "image": "images/scene_01.png",
+      "audio": "audio/scene_01.mp3",
+      "duration_sec": 7.25,
+      "image_prompt": "Vertical 9:16 portrait composition, cinematic dark ocean illustration, deep midnight blue and teal palette with orange accents, dramatic rim lighting, the International Space Station glowing high above the Earth curvature at night, tiny and lonely against the black void, ultra detailed, no text, no watermark",
+      "narration": "Le point de la Terre le plus éloigné de tout humain... se trouve, en fait, plus près de l'espace.",
+      "motion": "zoom_in",
+      "transition": "cut"
+    },
+    {
+      "id": "scene_02",
+      "image": "images/scene_02.png",
+      "audio": "audio/scene_02.mp3",
+      "duration_sec": 4.61,
+      "image_prompt": "Vertical 9:16 portrait composition, same cinematic dark ocean illustration style, deep midnight blue and teal palette with orange accents, dramatic rim lighting, aerial view of an endless empty Pacific Ocean with no land in sight, a single small glowing marker on the water, ultra detailed, no text, no watermark",
+      "narration": "Il s'appelle le Point Nemo, au milieu du Pacifique Sud.",
+      "motion": "zoom_out",
+      "transition": "cut"
+    },
+    {
+      "id": "scene_03",
+      "image": "images/scene_03.png",
+      "audio": "audio/scene_03.mp3",
+      "duration_sec": 4.01,
+      "image_prompt": "Vertical 9:16 portrait composition, same cinematic dark ocean illustration style, deep midnight blue and teal palette with orange accents, dramatic rim lighting, a stylized dark globe seen from above with three distant tiny islands marked by faint orange dots far apart from a central glowing point, ultra detailed, no text, no watermark",
+      "narration": "La terre la plus proche est à plus de deux mille cinq cents kilomètres.",
+      "motion": "pan_up",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene_04",
+      "image": "images/scene_04.png",
+      "audio": "audio/scene_04.mp3",
+      "duration_sec": 6.17,
+      "image_prompt": "Vertical 9:16 portrait composition, same cinematic dark ocean illustration style, deep midnight blue and teal palette with orange accents, dramatic rim lighting, a lone sailor on a small boat in a vast dark stormy ocean, minuscule against the horizon, ultra detailed, no text, no watermark",
+      "narration": "Si tu y es, personne n'est plus isolé que toi... sauf ceux qui passent au-dessus.",
+      "motion": "pan_down",
+      "transition": "cut"
+    },
+    {
+      "id": "scene_05",
+      "image": "images/scene_05.png",
+      "audio": "audio/scene_05.mp3",
+      "duration_sec": 8.14,
+      "image_prompt": "Vertical 9:16 portrait composition, same cinematic dark ocean illustration style, deep midnight blue and teal palette with orange accents, dramatic rim lighting, an astronaut floating inside a space station cupola window looking down at the dark blue Earth below, ultra detailed, no text, no watermark",
+      "narration": "Les astronautes de l'ISS, à quatre cents kilomètres d'altitude, sont parfois plus proches que n'importe quel humain.",
+      "motion": "zoom_in",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene_06",
+      "image": "images/scene_06.png",
+      "audio": "audio/scene_06.mp3",
+      "duration_sec": 4.78,
+      "image_prompt": "Vertical 9:16 portrait composition, same cinematic dark ocean illustration style, deep midnight blue and teal palette with orange accents, dramatic rim lighting, a glowing orange spacecraft burning up during atmospheric reentry above a dark ocean, trails of fire, ultra detailed, no text, no watermark",
+      "narration": "Et ce n'est pas tout. C'est aussi là que l'on fait tomber les vaisseaux spatiaux.",
+      "motion": "pan_up",
+      "transition": "flash"
+    },
+    {
+      "id": "scene_07",
+      "image": "images/scene_07.png",
+      "audio": "audio/scene_07.mp3",
+      "duration_sec": 4.49,
+      "image_prompt": "Vertical 9:16 portrait composition, same cinematic dark ocean illustration style, deep midnight blue and teal palette with orange accents, dramatic rim lighting, burning metal debris fragments splashing into the dark ocean with orange sparks and steam, ultra detailed, no text, no watermark",
+      "narration": "Des centaines de satellites et de stations, enterrés au fond de l'eau.",
+      "motion": "zoom_out",
+      "transition": "cut"
+    },
+    {
+      "id": "scene_08",
+      "image": "images/scene_08.png",
+      "audio": "audio/scene_08.mp3",
+      "duration_sec": 3.5,
+      "image_prompt": "Vertical 9:16 portrait composition, same cinematic dark ocean illustration style, deep midnight blue and teal palette with orange accents, dramatic rim lighting, underwater scene of a giant wrecked space station resting on the dark seabed, rusted metal covered in coral, faint rays of light from above, ultra detailed, no text, no watermark",
+      "narration": "On l'appelle le cimetière des vaisseaux spatiaux.",
+      "motion": "pan_down",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene_09",
+      "image": "images/scene_09.png",
+      "audio": "audio/scene_09.mp3",
+      "duration_sec": 4.85,
+      "image_prompt": "Vertical 9:16 portrait composition, same cinematic dark ocean illustration style, deep midnight blue and teal palette with orange accents, dramatic rim lighting, a mysterious glowing orange eye-like light in the deep dark ocean abyss, ominous and cinematic, ultra detailed, no text, no watermark",
+      "narration": "Et si le plus grand secret de l'espace dormait au fond de l'océan ?",
+      "motion": "zoom_in",
+      "transition": "fade_black"
+    }
+  ]
+}
