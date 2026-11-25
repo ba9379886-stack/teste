@@ -14,7 +14,7 @@
       "id": "scene_01",
       "image": "images/scene_01.png",
       "audio": "audio/scene_01.mp3",
-      "narration": "Cette graine noire est utilisée depuis plus de deux mille ans, et la science s'y intéresse enfin.",
+      "narration": "Cette minuscule graine noire fascine les chercheurs du monde entier. Voici pourquoi.",
       "motion": "zoom_in",
       "transition": "cut"
     },
@@ -22,7 +22,14 @@
       "id": "scene_02",
       "image": "images/scene_02.png",
       "audio": "audio/scene_02.mp3",
-      "narration": "L'huile de nigelle. Son secret ? Un composé actif appelé thymoquinone.",
+      "overlay": {
+        "file": "overlays/product_pouch.png",
+        "scale": 0.34,
+        "x": 0.39,
+        "y": 0.25,
+        "pop_in": true
+      },
+      "narration": "L'huile de nigelle, et sa molécule star : la thymoquinone. Un vrai concentré de puissance.",
       "motion": "zoom_in",
       "transition": "dissolve"
     },
@@ -30,7 +37,14 @@
       "id": "scene_03",
       "image": "images/scene_03.png",
       "audio": "audio/scene_03.mp3",
-      "narration": "Premier bénéfice : plusieurs études suggèrent qu'elle aide à mieux réguler la glycémie.",
+      "overlay": {
+        "file": "overlays/header_03_glycemie.png",
+        "scale": 0.88,
+        "x": 0.0,
+        "y": 0.60,
+        "pop_in": true
+      },
+      "narration": "Un : des méta-analyses montrent une baisse de la glycémie à jeun.",
       "motion": "zoom_in",
       "transition": "flash"
     },
@@ -38,7 +52,14 @@
       "id": "scene_04",
       "image": "images/scene_04.png",
       "audio": "audio/scene_04.mp3",
-      "narration": "Deuxième : elle pourrait contribuer à réduire le cholestérol et les triglycérides.",
+      "overlay": {
+        "file": "overlays/header_04_cholesterol.png",
+        "scale": 0.88,
+        "x": 0.0,
+        "y": 0.60,
+        "pop_in": true
+      },
+      "narration": "Deux : le cholestérol total, le mauvais cholestérol et les triglycérides baissent dans plusieurs essais.",
       "motion": "pan_right",
       "transition": "cut"
     },
@@ -46,7 +67,14 @@
       "id": "scene_05",
       "image": "images/scene_05.png",
       "audio": "audio/scene_05.mp3",
-      "narration": "Troisième : certains essais montrent un effet modeste sur la tension artérielle.",
+      "overlay": {
+        "file": "overlays/header_05_tension.png",
+        "scale": 0.88,
+        "x": 0.0,
+        "y": 0.60,
+        "pop_in": true
+      },
+      "narration": "Trois : des essais cliniques observent une baisse de la tension artérielle.",
       "motion": "zoom_out",
       "transition": "cut"
     },
@@ -54,7 +82,14 @@
       "id": "scene_06",
       "image": "images/scene_06.png",
       "audio": "audio/scene_06.mp3",
-      "narration": "Elle est aussi étudiée pour ses effets anti-inflammatoires, notamment sur les douleurs articulaires.",
+      "overlay": {
+        "file": "overlays/header_06_inflammation.png",
+        "scale": 0.88,
+        "x": 0.0,
+        "y": 0.60,
+        "pop_in": true
+      },
+      "narration": "Quatre : son action anti-inflammatoire est étudiée pour soulager les douleurs articulaires.",
       "motion": "pan_down",
       "transition": "cut"
     },
@@ -62,7 +97,14 @@
       "id": "scene_07",
       "image": "images/scene_07.png",
       "audio": "audio/scene_07.mp3",
-      "narration": "Et ses antioxydants soutiennent les défenses naturelles de ton organisme.",
+      "overlay": {
+        "file": "overlays/header_07_stress_oxydatif.png",
+        "scale": 0.88,
+        "x": 0.0,
+        "y": 0.60,
+        "pop_in": true
+      },
+      "narration": "Cinq : ses antioxydants protègent tes cellules contre le stress oxydatif, jour après jour.",
       "motion": "zoom_in",
       "transition": "flash"
     },
@@ -70,7 +112,7 @@
       "id": "scene_08",
       "image": "images/scene_08.png",
       "audio": "audio/scene_08.mp3",
-      "narration": "Attention : ce n'est pas un médicament, et elle ne remplace jamais un traitement.",
+      "narration": "Mais attention : c'est un complément, pas un médicament. N'arrête jamais un traitement sans avis médical.",
       "motion": "pan_left",
       "transition": "cut"
     },
@@ -78,7 +120,14 @@
       "id": "scene_09",
       "image": "images/scene_09.png",
       "audio": "audio/scene_09.mp3",
-      "narration": "Demande conseil à ton médecin, puis abonne-toi pour la suite !",
+      "overlay": {
+        "file": "overlays/product_pouch.png",
+        "scale": 0.37,
+        "x": 0.37,
+        "y": 0.34,
+        "pop_in": true
+      },
+      "narration": "Intègre-la à ton hygiène de vie, et abonne-toi pour la suite !",
       "motion": "zoom_out",
       "transition": "dissolve"
     }

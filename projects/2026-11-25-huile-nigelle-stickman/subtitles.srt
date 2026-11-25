@@ -1,147 +1,167 @@
 1
-00:00:00,000 --> 00:00:01,368
-Cette graine noire est
+00:00:00,000 --> 00:00:02,149
+Cette minuscule graine noire
 
 2
-00:00:01,368 --> 00:00:03,110
-utilisée depuis plus de deux
+00:00:02,149 --> 00:00:04,067
+fascine les chercheurs du
 
 3
-00:00:03,110 --> 00:00:03,732
-mille ans,
+00:00:04,067 --> 00:00:05,065
+monde entier.
 
 4
-00:00:03,732 --> 00:00:05,411
-et la science s'y intéresse
+00:00:05,065 --> 00:00:06,216
+Voici pourquoi.
 
 5
-00:00:05,411 --> 00:00:05,784
-enfin.
+00:00:06,336 --> 00:00:07,842
+L'huile de nigelle,
 
 6
-00:00:05,904 --> 00:00:07,755
-L'huile de nigelle.
+00:00:07,842 --> 00:00:09,506
+et sa molécule star :
 
 7
-00:00:07,755 --> 00:00:08,924
-Son secret ?
+00:00:09,506 --> 00:00:10,774
+la thymoquinone.
 
 8
-00:00:08,924 --> 00:00:11,165
-Un composé actif appelé
+00:00:10,774 --> 00:00:12,359
+Un vrai concentré de
 
 9
-00:00:11,165 --> 00:00:12,432
-thymoquinone.
+00:00:12,359 --> 00:00:13,152
+puissance.
 
 10
-00:00:12,552 --> 00:00:13,714
-Premier bénéfice :
+00:00:13,272 --> 00:00:13,577
+Un :
 
 11
-00:00:13,714 --> 00:00:15,393
-plusieurs études suggèrent
+00:00:13,577 --> 00:00:15,560
+des méta-analyses montrent
 
 12
-00:00:15,393 --> 00:00:17,201
-qu'elle aide à mieux réguler
+00:00:15,560 --> 00:00:17,466
+une baisse de la glycémie
 
 13
-00:00:17,201 --> 00:00:17,976
-la glycémie.
+00:00:17,466 --> 00:00:18,000
+à jeun.
 
 14
-00:00:18,096 --> 00:00:18,843
-Deuxième :
+00:00:18,120 --> 00:00:18,582
+Deux :
 
 15
-00:00:18,843 --> 00:00:20,786
-elle pourrait contribuer à
+00:00:18,582 --> 00:00:20,200
+le cholestérol total,
 
 16
-00:00:20,786 --> 00:00:22,655
-réduire le cholestérol et
+00:00:20,200 --> 00:00:22,126
+le mauvais cholestérol et
 
 17
-00:00:22,655 --> 00:00:24,000
-les triglycérides.
+00:00:22,126 --> 00:00:24,129
+les triglycérides baissent
 
 18
-00:00:24,120 --> 00:00:24,881
-Troisième :
+00:00:24,129 --> 00:00:25,824
+dans plusieurs essais.
 
 19
-00:00:24,881 --> 00:00:26,749
-certains essais montrent un
+00:00:25,944 --> 00:00:26,427
+Trois :
 
 20
-00:00:26,749 --> 00:00:28,687
-effet modeste sur la tension
+00:00:26,427 --> 00:00:27,807
+des essais cliniques
 
 21
-00:00:28,687 --> 00:00:29,448
-artérielle.
+00:00:27,807 --> 00:00:29,601
+observent une baisse de la
 
 22
-00:00:29,568 --> 00:00:31,249
-Elle est aussi étudiée pour
+00:00:29,601 --> 00:00:30,912
+tension artérielle.
 
 23
-00:00:31,249 --> 00:00:31,871
-ses effets
+00:00:31,032 --> 00:00:31,630
+Quatre :
 
 24
-00:00:31,871 --> 00:00:33,116
-anti-inflammatoires,
+00:00:31,630 --> 00:00:32,378
+son action
 
 25
-00:00:33,116 --> 00:00:34,735
-notamment sur les douleurs
+00:00:32,378 --> 00:00:34,022
+anti-inflammatoire est
 
 26
-00:00:34,735 --> 00:00:35,544
-articulaires.
+00:00:34,022 --> 00:00:35,891
+étudiée pour soulager les
 
 27
-00:00:35,664 --> 00:00:36,897
-Et ses antioxydants
+00:00:35,891 --> 00:00:37,536
+douleurs articulaires.
 
 28
-00:00:36,897 --> 00:00:38,455
-soutiennent les défenses
+00:00:37,656 --> 00:00:38,132
+Cinq :
 
 29
-00:00:38,455 --> 00:00:40,272
-naturelles de ton organisme.
+00:00:38,132 --> 00:00:40,192
+ses antioxydants protègent
 
 30
-00:00:40,392 --> 00:00:41,110
-Attention :
+00:00:40,192 --> 00:00:41,936
+tes cellules contre le
 
 31
-00:00:41,110 --> 00:00:42,871
-ce n'est pas un médicament,
+00:00:41,936 --> 00:00:43,204
+stress oxydatif,
 
 32
-00:00:42,871 --> 00:00:44,567
-et elle ne remplace jamais
+00:00:43,204 --> 00:00:44,472
+jour après jour.
 
 33
-00:00:44,567 --> 00:00:45,480
-un traitement.
+00:00:44,592 --> 00:00:45,709
+Mais attention :
 
 34
-00:00:45,600 --> 00:00:47,061
-Demande conseil à ton
+00:00:45,709 --> 00:00:47,106
+c'est un complément,
 
 35
-00:00:47,061 --> 00:00:47,617
-médecin,
+00:00:47,106 --> 00:00:48,363
+pas un médicament.
 
 36
-00:00:47,617 --> 00:00:49,217
-puis abonne-toi pour la
+00:00:48,363 --> 00:00:49,620
+N'arrête jamais un
 
 37
-00:00:49,217 --> 00:00:49,704
-suite !
+00:00:49,620 --> 00:00:51,017
+traitement sans avis
+
+38
+00:00:51,017 --> 00:00:51,576
+médical.
+
+39
+00:00:51,696 --> 00:00:53,519
+Intègre-la à ton hygiène de
+
+40
+00:00:53,519 --> 00:00:53,789
+vie,
+
+41
+00:00:53,789 --> 00:00:55,612
+et abonne-toi pour la suite
+
+42
+00:00:55,612 --> 00:00:55,812
+!

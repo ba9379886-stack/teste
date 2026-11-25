@@ -350,7 +350,10 @@ def build_capcut_draft(
         allow_replace=True,
     )
 
-    script.add_track(TrackType.video, "scenes")
+    has_any_overlay = any(bool(s.get("overlay")) for s in scenes)
+    script.add_track(TrackType.video, "scenes", relative_index=0)
+    if has_any_overlay:
+        script.add_track(TrackType.video, "overlays", relative_index=2)
     script.add_track(TrackType.audio, "voiceover")
     if bgm_path:
         script.add_track(TrackType.audio, "bgm")
@@ -433,6 +436,33 @@ def build_capcut_draft(
                 video_seg.add_transition(trans_enum, duration="0.4s")
 
         script.add_segment(video_seg, "scenes")
+
+        # 2b. Incrustation / Overlay optionnel sur piste vidéo supérieure (produit détouré, preuve PubMed, etc.)
+        overlay_cfg = scene.get("overlay")
+        if overlay_cfg and isinstance(overlay_cfg, dict) and overlay_cfg.get("file"):
+            ov_path = (project_dir / str(overlay_cfg["file"])).resolve()
+            if ov_path.exists():
+                ov_scale = float(overlay_cfg.get("scale", 0.5))
+                ov_x = float(overlay_cfg.get("x", 0.0))
+                ov_y = float(overlay_cfg.get("y", 0.5))
+                ov_mat = cc.VideoMaterial(str(ov_path))
+                ov_seg = cc.VideoSegment(
+                    ov_mat,
+                    clip_range,
+                    clip_settings=ClipSettings(
+                        scale_x=ov_scale,
+                        scale_y=ov_scale,
+                        transform_x=ov_x,
+                        transform_y=ov_y,
+                    ),
+                )
+                if overlay_cfg.get("pop_in", True) and clip_duration_us > int(0.4 * SEC):
+                    pop_dur = int(0.25 * SEC)
+                    ov_seg.add_keyframe(KeyframeProperty.uniform_scale, 0, round(ov_scale * 0.86, 4))
+                    ov_seg.add_keyframe(KeyframeProperty.uniform_scale, pop_dur, round(ov_scale, 4))
+                    ov_seg.add_keyframe(KeyframeProperty.alpha, 0, 0.0)
+                    ov_seg.add_keyframe(KeyframeProperty.alpha, int(0.2 * SEC), 1.0)
+                script.add_segment(ov_seg, "overlays")
 
         # 3. Sous-titres dynamiques synchronisés sur la voix off de la scène
         subtitle_raw = scene.get("subtitle") if scene.get("subtitle") is not None else scene.get("narration", "")
