@@ -1,0 +1,86 @@
+{
+  "project_slug": "2026-11-25-huile-nigelle-stickman",
+  "title": "Les bienfaits de l'huile de nigelle",
+  "draft_name": "Huile de nigelle - Stick Man",
+  "format": "9:16",
+  "fps": 30,
+  "voice": {
+    "language": "fr-FR",
+    "gender": "masculine",
+    "use_case": "narration"
+  },
+  "scenes": [
+    {
+      "id": "scene_01",
+      "image": "images/scene_01.png",
+      "audio": "audio/scene_01.mp3",
+      "narration": "Cette graine noire est utilisée depuis plus de deux mille ans, et la science s'y intéresse enfin.",
+      "motion": "zoom_in",
+      "transition": "cut"
+    },
+    {
+      "id": "scene_02",
+      "image": "images/scene_02.png",
+      "audio": "audio/scene_02.mp3",
+      "narration": "L'huile de nigelle. Son secret ? Un composé actif appelé thymoquinone.",
+      "motion": "zoom_in",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene_03",
+      "image": "images/scene_03.png",
+      "audio": "audio/scene_03.mp3",
+      "narration": "Premier bénéfice : plusieurs études suggèrent qu'elle aide à mieux réguler la glycémie.",
+      "motion": "zoom_in",
+      "transition": "flash"
+    },
+    {
+      "id": "scene_04",
+      "image": "images/scene_04.png",
+      "audio": "audio/scene_04.mp3",
+      "narration": "Deuxième : elle pourrait contribuer à réduire le cholestérol et les triglycérides.",
+      "motion": "pan_right",
+      "transition": "cut"
+    },
+    {
+      "id": "scene_05",
+      "image": "images/scene_05.png",
+      "audio": "audio/scene_05.mp3",
+      "narration": "Troisième : certains essais montrent un effet modeste sur la tension artérielle.",
+      "motion": "zoom_out",
+      "transition": "cut"
+    },
+    {
+      "id": "scene_06",
+      "image": "images/scene_06.png",
+      "audio": "audio/scene_06.mp3",
+      "narration": "Elle est aussi étudiée pour ses effets anti-inflammatoires, notamment sur les douleurs articulaires.",
+      "motion": "pan_down",
+      "transition": "cut"
+    },
+    {
+      "id": "scene_07",
+      "image": "images/scene_07.png",
+      "audio": "audio/scene_07.mp3",
+      "narration": "Et ses antioxydants soutiennent les défenses naturelles de ton organisme.",
+      "motion": "zoom_in",
+      "transition": "flash"
+    },
+    {
+      "id": "scene_08",
+      "image": "images/scene_08.png",
+      "audio": "audio/scene_08.mp3",
+      "narration": "Attention : ce n'est pas un médicament, et elle ne remplace jamais un traitement.",
+      "motion": "pan_left",
+      "transition": "cut"
+    },
+    {
+      "id": "scene_09",
+      "image": "images/scene_09.png",
+      "audio": "audio/scene_09.mp3",
+      "narration": "Demande conseil à ton médecin, puis abonne-toi pour la suite !",
+      "motion": "zoom_out",
+      "transition": "dissolve"
+    }
+  ]
+}
