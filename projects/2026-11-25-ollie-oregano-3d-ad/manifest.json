@@ -1,0 +1,82 @@
+{
+  "project_slug": "2026-11-25-ollie-oregano-3d-ad",
+  "draft_name": "Ollie 3D Ad - Oil of Oregano with Black Seed Oil (25s)",
+  "format": "9:16",
+  "fps": 30,
+  "scene_gap_sec": 0.0,
+  "subtitle_color": "yellow",
+  "ad_metadata": {
+    "framework": "Pixar-Inspired 3D Character Comedy Commercial (25s Reels / TikTok / Meta Ads)",
+    "primary_text": "Meet Ollie — the tiny leaf with BIG energy. 🌿🥊\n\nOil of Oregano + Black Seed Oil teamed up in easy-to-swallow golden softgels (60 Softgels per pouch).\n\nStop sleeping on oregano 👇",
+    "headline": "Oil of Oregano + Black Seed Oil · 60 Softgels",
+    "description": "Dietary Supplement · Easy-to-Swallow Softgels"
+  },
+  "scenes": [
+    {
+      "id": "scene_01",
+      "image": "images/scene_01.png",
+      "video": "videos/scene_01.mp4",
+      "audio": "audio/beat_01.mp3",
+      "narration": "BRO! WHAT IS GOING ON WITH YOUR LIFE?!",
+      "subtitle": "BRO! WHAT IS GOING ON WITH YOUR LIFE?!",
+      "motion": "zoom_in",
+      "transition": "cut",
+      "video_prompt": "Pixar-inspired 3D cartoon animation in a messy warm living room. A tired man slumps on the couch surrounded by everyday chaos as tiny muscular green oregano leaf Ollie wearing black sunglasses, double gold chains, and oversized red boxing gloves superhero-lands onto the wooden coffee table with a dust shockwave and shouts energetically."
+    },
+    {
+      "id": "scene_02",
+      "image": "images/scene_02.png",
+      "video": "videos/scene_02.mp4",
+      "audio": "audio/beat_02.mp3",
+      "narration": "You need backup, my friend!",
+      "subtitle": "YOU NEED BACKUP, MY FRIEND!",
+      "motion": "zoom_in",
+      "transition": "cut",
+      "video_prompt": "Pixar-style 3D close-up on the wooden coffee table. Muscular green oregano leaf Ollie wearing black sunglasses and double gold chains clashes his oversized red boxing gloves together and strikes a confident superhero pose as warm golden light rays burst behind him."
+    },
+    {
+      "id": "scene_03",
+      "image": "images/scene_03.png",
+      "video": "videos/scene_03.mp4",
+      "audio": "audio/beat_03.mp3",
+      "narration": "Oregano oil. Black seed oil. Two legends. ONE TEAM!",
+      "subtitle": "OREGANO OIL. BLACK SEED OIL. TWO LEGENDS. ONE TEAM!",
+      "motion": "zoom_in",
+      "transition": "cut",
+      "video_prompt": "Dramatic luxury golden spotlight reveal on a dark studio stage. The exact white-and-olive-green OIL OF OREGANO WITH BLACK SEED OIL pouch levitates in the golden spotlight surrounded by orbiting translucent golden softgels, green oregano leaves, and black seeds while Ollie stands below pointing up proudly."
+    },
+    {
+      "id": "scene_04",
+      "image": "images/scene_04.png",
+      "video": "videos/scene_04.mp4",
+      "audio": "audio/beat_04.mp3",
+      "narration": "Wait... YOU'RE the boss?",
+      "subtitle": "Wait... YOU'RE the boss?",
+      "motion": "zoom_in",
+      "transition": "cut",
+      "video_prompt": "Pixar-inspired 3D living room shot. The tired man in a grey hoodie leans forward off the couch squinting skeptically down at tiny muscular Ollie standing proudly with hands on hips on the coffee table."
+    },
+    {
+      "id": "scene_05",
+      "image": "images/scene_05.png",
+      "video": "videos/scene_05.mp4",
+      "audio": "audio/beat_05.mp3",
+      "narration": "Obviously! I'm literally the LEAF of the operation!",
+      "subtitle": "OBVIOUSLY! I'm literally the LEAF of the operation!",
+      "motion": "zoom_in",
+      "transition": "cut",
+      "video_prompt": "Extreme Pixar-style 3D close-up of muscular green oregano leaf Ollie flexing both huge green biceps with oversized red boxing gloves, smirking confidently behind black sunglasses with gleaming double gold chains."
+    },
+    {
+      "id": "scene_06",
+      "image": "images/scene_06.png",
+      "video": "videos/scene_06.mp4",
+      "audio": "audio/beat_06.mp3",
+      "narration": "Stop sleeping on oregano!",
+      "subtitle": "STOP SLEEPING ON OREGANO!",
+      "motion": "zoom_in",
+      "transition": "cut",
+      "video_prompt": "Premium dark studio commercial hero packshot. Under a warm volumetric golden spotlight, the exact white-and-olive-green OIL OF OREGANO WITH BLACK SEED OIL pouch rests on a dark circular pedestal with golden softgels beside it while Ollie stands on the left pointing his red boxing glove directly at the package."
+    }
+  ]
+}
